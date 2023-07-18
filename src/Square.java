@@ -51,7 +51,7 @@ public class Square {
     }
 
     public void checkPerimeter() {
-        if (!done) {
+        if (!done && !(number == Number.EMPTY)) {
             int numOfLines = 0;
             int numOfX = 0;
             for (Direction direction : Direction.values()) {
@@ -71,36 +71,38 @@ public class Square {
                 }
             } else if (numOfLines + numOfX < 2) {
                 for (DiagonalDirections diagonalDirections : DiagonalDirections.values()) {
-                    Line oppositeSideOne = getLine(diagonalDirections.getDirection().getOpposite());
-                    Line oppositeSideTwo = getLine(diagonalDirections.getDirection().getClockwise());
-                    numOfLines = 0;
-                    numOfX = 0;
-                    if (oppositeSideOne.getLineOrX() == LineOrX.LINE) {
-                        numOfLines++;
-                    } else if (oppositeSideOne.getLineOrX() == LineOrX.X) {
-                        numOfX++;
-                    }
-                    if (oppositeSideTwo.getLineOrX() == LineOrX.LINE) {
-                        numOfLines++;
-                    } else if (oppositeSideTwo.getLineOrX() == LineOrX.X) {
-                        numOfX++;
-                    }
-                    if (getSlash(diagonalDirections).getEitherOr() == EitherOr.ONE_OR_OTHER) {
-                        if (numOfLines + 1 == getNumber().getValue()) {
-                            oppositeSideOne.setProtectedLineOrX(LineOrX.X);
-                            oppositeSideTwo.setProtectedLineOrX(LineOrX.X);
+                    if (!(getSlash(diagonalDirections).getEitherOr() == EitherOr.EMPTY)) {
+                        Line oppositeSideOne = getLine(diagonalDirections.getDirection().getOpposite());
+                        Line oppositeSideTwo = getLine(diagonalDirections.getDirection().getClockwise());
+                        numOfLines = 0;
+                        numOfX = 0;
+                        if (oppositeSideOne.getLineOrX() == LineOrX.LINE) {
+                            numOfLines++;
+                        } else if (oppositeSideOne.getLineOrX() == LineOrX.X) {
+                            numOfX++;
                         }
-                        if (numOfX + 1 == 4 - getNumber().getValue()) {
-                            oppositeSideOne.setProtectedLineOrX(LineOrX.LINE);
-                            oppositeSideTwo.setProtectedLineOrX(LineOrX.LINE);
+                        if (oppositeSideTwo.getLineOrX() == LineOrX.LINE) {
+                            numOfLines++;
+                        } else if (oppositeSideTwo.getLineOrX() == LineOrX.X) {
+                            numOfX++;
                         }
-                    } else if (getSlash(diagonalDirections).getEitherOr() == EitherOr.BOTH_OR_NEITHER) {
-                        if (numOfLines + 2 > getNumber().getValue()) {
-                            getLine(diagonalDirections.getDirection()).setProtectedLineOrX(LineOrX.X);
-                            getLine(diagonalDirections.getDirection().getClockwise()).setProtectedLineOrX(LineOrX.X);
-                        } else if (numOfX + 2 > 4 - getNumber().getValue()) {
-                            getLine(diagonalDirections.getDirection()).setProtectedLineOrX(LineOrX.LINE);
-                            getLine(diagonalDirections.getDirection().getClockwise()).setProtectedLineOrX(LineOrX.LINE);
+                        if (getSlash(diagonalDirections).getEitherOr() == EitherOr.ONE_OR_OTHER) {
+                            if (numOfLines + 1 == getNumber().getValue()) {
+                                oppositeSideOne.setProtectedLineOrX(LineOrX.X);
+                                oppositeSideTwo.setProtectedLineOrX(LineOrX.X);
+                            }
+                            if (numOfX + 1 == 4 - getNumber().getValue()) {
+                                oppositeSideOne.setProtectedLineOrX(LineOrX.LINE);
+                                oppositeSideTwo.setProtectedLineOrX(LineOrX.LINE);
+                            }
+                        } else if (getSlash(diagonalDirections).getEitherOr() == EitherOr.BOTH_OR_NEITHER) {
+                            if (numOfLines + 2 > getNumber().getValue()) {
+                                getLine(diagonalDirections.getDirection()).setProtectedLineOrX(LineOrX.X);
+                                getLine(diagonalDirections.getDirection().getCounterClockwise()).setProtectedLineOrX(LineOrX.X);
+                            } else if (numOfX + 2 > 4 - getNumber().getValue()) {
+                                getLine(diagonalDirections.getDirection()).setProtectedLineOrX(LineOrX.LINE);
+                                getLine(diagonalDirections.getDirection().getCounterClockwise()).setProtectedLineOrX(LineOrX.LINE);
+                            }
                         }
                     }
                 }

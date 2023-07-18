@@ -1,7 +1,7 @@
 public enum EitherOr {
     EMPTY(" ", " ", " ", " "),
     ONE_OR_OTHER("/", "\\", "/", "\\"),
-    BOTH_OR_NEITHER(" ", " ", " ", " ");
+    BOTH_OR_NEITHER("⌜", "⌝", "⌟", "⌞");
 
     private final String northWest;
     private final String northEast;

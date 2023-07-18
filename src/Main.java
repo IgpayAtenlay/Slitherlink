@@ -1,13 +1,13 @@
 public class Main {
 
     public static void main(String[] args) {
-        Grid grid = new Grid(20, 20);
+        PuzzleStorage.addPuzzles();
+        Grid grid = new Grid(7, 7);
         grid.ringOfX();
-        PopulateGrid.addCustomNumbers(grid);
-        for (int i = 0; i < 5; i++) {
+        PopulateGrid.addNumberArray(grid, PuzzleStorage.getPuzzle(0));
+        for (int i = 0; i < 10; i++) {
             Logic.runLogic(grid);
         }
-//        Threes.diagonalThrees(11, 11, grid);
         System.out.println(grid);
     }
 }

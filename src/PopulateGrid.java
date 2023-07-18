@@ -29,13 +29,28 @@ public class PopulateGrid {
     }
 
     public static void addCustomNumbers(Grid grid) {
-        grid.getSquareGrid()[5][5].setNumber(Number.THREE);
-        grid.getSquareGrid()[6][5].setNumber(Number.THREE);
-        grid.getSquareGrid()[9][3].setNumber(Number.THREE);
-        grid.getSquareGrid()[9][4].setNumber(Number.THREE);
-        grid.getSquareGrid()[0][0].setNumber(Number.THREE);
-        grid.getSquareGrid()[1][0].setNumber(Number.THREE);
-        grid.getSquareGrid()[11][11].setNumber(Number.THREE);
-        grid.getSquareGrid()[12][10].setNumber(Number.THREE);
+//        grid.getSquareGrid()[5][5].setNumber(Number.THREE);
+//        grid.getSquareGrid()[6][5].setNumber(Number.THREE);
+//        grid.getSquareGrid()[9][3].setNumber(Number.THREE);
+//        grid.getSquareGrid()[9][4].setNumber(Number.THREE);
+//        grid.getSquareGrid()[0][0].setNumber(Number.THREE);
+//        grid.getSquareGrid()[1][0].setNumber(Number.THREE);
+//        grid.getSquareGrid()[11][11].setNumber(Number.THREE);
+//        grid.getSquareGrid()[12][10].setNumber(Number.THREE);
+//        grid.getSquareGrid()[7][7].setNumber(Number.ZERO);
+        grid.getSquareGrid()[2][0].setNumber(Number.THREE);
+        grid.getSquareGrid()[3][0].setNumber(Number.THREE);
+        grid.getSquareGrid()[6][0].setNumber(Number.THREE);
+        grid.getSquareGrid()[2][0].setNumber(Number.THREE);
+        grid.getSquareGrid()[3][0].setNumber(Number.THREE);
+        grid.getSquareGrid()[6][0].setNumber(Number.THREE);
+    }
+
+    public static void addNumberArray(Grid grid, int[][] array) {
+        for (int j = 0; j < grid.getSquareGrid()[0].length; j++) {
+            for (int i = 0; i < grid.getSquareGrid().length; i++) {
+                grid.getSquareGrid()[i][j].setNumber(Number.getNumber(array[i][j]));
+            }
+        }
     }
 }

@@ -30,6 +30,7 @@ public class Logic {
             for (int i = 0; i < grid.getPointGrid().length; i++) {
                 grid.getPointGrid()[i][j].checkPerimeter();
                 grid.getPointGrid()[i][j].testIsDone();
+                grid.getPointGrid()[i][j].logicAddSlash();
                 grid.getPointGrid()[i][j].copySlash();
                 grid.getPointGrid()[i][j].fillSlash();
             }

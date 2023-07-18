@@ -88,7 +88,21 @@ public class Point {
     }
 
     public void logicAddSlash() {
-
+        if (!done) {
+            for (DiagonalDirections diagonalDirections : DiagonalDirections.values()) {
+                if (getSlashes(diagonalDirections).getEitherOr() == EitherOr.EMPTY) {
+                    LineOrX one = getLine(diagonalDirections.getDirection()).getLineOrX();
+                    LineOrX two = getLine(diagonalDirections.getDirection().getCounterClockwise()).getLineOrX();
+                    if (!(one == LineOrX.EMPTY) && !(two == LineOrX.EMPTY)) {
+                        if ((one == LineOrX.LINE && two == LineOrX.LINE) || (one == LineOrX.X && two == LineOrX.X)) {
+                            getSlashes(diagonalDirections).setProtectedEitherOr(EitherOr.BOTH_OR_NEITHER);
+                        } else {
+                            getSlashes(diagonalDirections).setProtectedEitherOr(EitherOr.ONE_OR_OTHER);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void copySlash() {
