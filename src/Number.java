@@ -21,10 +21,6 @@ public enum Number {
         return str;
     }
 
-    public boolean isEmpty() {
-        return value == -1;
-    }
-
     public static Number getNumber(int num) {
         for (Number number: Number.values()) {
             if (number.getValue() == num) {

@@ -1,25 +1,31 @@
-public class Line {
-    private LineOrX lineOrX;
+public enum Line {
+    EMPTY("     ", " "),
+    LINE("-----", "|"),
+    X("  X  ", "X");
 
-    public Line() {
-        this(LineOrX.EMPTY);
+    private final String horzStr;
+    private final String vertStr;
+
+    Line(String horzStr, String vertStr) {
+        this.horzStr = horzStr;
+        this.vertStr = vertStr;
     }
 
-    public Line(LineOrX lineOrX) {
-        this.lineOrX = lineOrX;
+    public String getHorzStr() {
+        return horzStr;
     }
 
-    public void setProtectedLineOrX(LineOrX lineOrX) {
-        if (this.lineOrX == LineOrX.EMPTY) {
-            this.lineOrX = lineOrX;
+    public String getVertStr() {
+        return getVertStr(true);
+    }
+
+    public String getVertStr(boolean isMiddle) {
+        if (isMiddle) {
+            return vertStr;
+        } else if (this == X) {
+            return " ";
+        } else {
+            return vertStr;
         }
-    }
-
-    public void setLineOrX(LineOrX lineOrX) {
-        this.lineOrX = lineOrX;
-    }
-
-    public LineOrX getLineOrX() {
-        return lineOrX;
     }
 }

@@ -68,15 +68,15 @@ public enum Direction {
         }
     }
 
-    public DiagonalDirections getDiagonal() {
-        if (index == DiagonalDirections.NORTH_WEST.getIndex()) {
-            return DiagonalDirections.NORTH_WEST;
-        } else if (index == DiagonalDirections.NORTH_EAST.getIndex()) {
-            return DiagonalDirections.NORTH_EAST;
-        } else if (index == DiagonalDirections.SOUTH_EAST.getIndex()) {
-            return DiagonalDirections.SOUTH_EAST;
+    public DiagonalDirection getDiagonal() {
+        if (index == DiagonalDirection.NORTH_WEST.getIndex()) {
+            return DiagonalDirection.NORTH_WEST;
+        } else if (index == DiagonalDirection.NORTH_EAST.getIndex()) {
+            return DiagonalDirection.NORTH_EAST;
+        } else if (index == DiagonalDirection.SOUTH_EAST.getIndex()) {
+            return DiagonalDirection.SOUTH_EAST;
         } else {
-            return DiagonalDirections.SOUTH_WEST;
+            return DiagonalDirection.SOUTH_WEST;
         }
     }
 }

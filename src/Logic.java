@@ -1,39 +1,46 @@
 public class Logic {
-    public static void runLogic(Grid grid) {
-        runThrees(grid);
-        runSquare(grid);
-        runPoint(grid);
+
+    public static void runLogic(Puzzle puzzle) {
+        for(int i = 0; i < 20; i++) {
+            runThrees(puzzle);
+            runPerimeter(puzzle);
+            runSlashLogic(puzzle);
+        }
     }
 
-    public static void runThrees(Grid grid) {
-        for (int j = 0; j < grid.getSquareGrid()[0].length; j++) {
-            for (int i = 0; i < grid.getSquareGrid().length; i++) {
-                if (grid.getNumber(i, j) == Number.THREE) {
-                    Threes.adjacentThrees(i, j, grid);
-                    Threes.diagonalThrees(i, j, grid);
+    public static void runThrees(Puzzle puzzle) {
+        for (int y = 0; y < puzzle.getSizeY(); y++) {
+            for (int x = 0; x < puzzle.getSizeX(); x++) {
+                if (puzzle.getNumber(x, y) == Number.THREE) {
+                    ThreeCheck.adjacentThrees(x, y, puzzle);
+                    ThreeCheck.diagonalThrees(x, y, puzzle);
+                    ThreeCheck.lineIntoThrees(x, y, puzzle);
                 }
             }
         }
     }
 
-    public static void runSquare(Grid grid) {
-        for (int j = 0; j < grid.getSquareGrid()[0].length; j++) {
-            for (int i = 0; i < grid.getSquareGrid().length; i++) {
-                grid.getSquareGrid()[i][j].checkPerimeter();
-                grid.getSquareGrid()[i][j].testIsDone();
+    public static void runPerimeter(Puzzle puzzle) {
+        for (int y = 0; y < puzzle.getSizeY(); y++) {
+            for (int x = 0; x < puzzle.getSizeX(); x++) {
+                PerimeterCheck.checkPerimeter(x, y, puzzle, PointOrSquare.SQUARE);
+            }
+        }
+        for (int y = 0; y < puzzle.getSizeY() + 1; y++) {
+            for (int x = 0; x < puzzle.getSizeX() + 1; x++) {
+                PerimeterCheck.checkPerimeter(x, y, puzzle, PointOrSquare.POINT);
             }
         }
     }
 
-    public static void runPoint(Grid grid) {
-        for (int j = 0; j < grid.getPointGrid()[0].length; j++) {
-            for (int i = 0; i < grid.getPointGrid().length; i++) {
-                grid.getPointGrid()[i][j].checkPerimeter();
-                grid.getPointGrid()[i][j].testIsDone();
-                grid.getPointGrid()[i][j].logicAddSlash();
-                grid.getPointGrid()[i][j].copySlash();
-                grid.getPointGrid()[i][j].fillSlash();
+    public static void runSlashLogic(Puzzle puzzle) {
+        for (int y = 0; y < puzzle.getSizeY() + 1; y++) {
+            for (int x = 0; x < puzzle.getSizeX() + 1; x++) {
+                SlashLogic.addSlash(x, y, puzzle);
+                SlashLogic.copySlash(x, y, puzzle);
+
             }
         }
     }
+
 }

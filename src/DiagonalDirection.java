@@ -1,4 +1,4 @@
-public enum DiagonalDirections {
+public enum DiagonalDirection {
 
     NORTH_WEST(0, 0, 0, 1, 3, 2),
     NORTH_EAST(1, 1, 0, 2, 0, 3),
@@ -12,7 +12,7 @@ public enum DiagonalDirections {
     private final int counterClockwise;
     private final int opposite;
 
-    DiagonalDirections(int index, int xOffset, int yOffset, int clockwise, int counterClockwise, int opposite) {
+    DiagonalDirection(int index, int xOffset, int yOffset, int clockwise, int counterClockwise, int opposite) {
         this.index = index;
         this.xOffset = xOffset;
         this.yOffset = yOffset;
@@ -53,7 +53,7 @@ public enum DiagonalDirections {
         }
     }
 
-    public DiagonalDirections getClockwise() {
+    public DiagonalDirection getClockwise() {
         if (this.clockwise == NORTH_WEST.index) {
             return NORTH_WEST;
         } else if (this.clockwise == SOUTH_EAST.index) {
@@ -65,7 +65,7 @@ public enum DiagonalDirections {
         }
     }
 
-    public DiagonalDirections getCounterClockwise() {
+    public DiagonalDirection getCounterClockwise() {
         if (this.counterClockwise == NORTH_WEST.index) {
             return NORTH_WEST;
         } else if (this.counterClockwise == SOUTH_EAST.index) {
@@ -77,7 +77,7 @@ public enum DiagonalDirections {
         }
     }
 
-    public DiagonalDirections getOpposite() {
+    public DiagonalDirection getOpposite() {
         if (this.opposite == NORTH_WEST.index) {
             return NORTH_WEST;
         } else if (this.opposite == SOUTH_EAST.index) {
