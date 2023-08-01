@@ -11,6 +11,8 @@ public class Main {
 
         Logic.runLogic(activePuzzle);
 
+        System.out.println(CheckDone.isDone(activePuzzle));
+
         System.out.println("Without slashes");
         System.out.println(activePuzzle.toString(false));
         System.out.println("With slashes");
