@@ -2,11 +2,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int puzzleNum = 6;
+        int puzzleNum = 23;
 
         Memory.addPuzzles();
 
         Puzzle activePuzzle = new Puzzle(Memory.getPuzzle(puzzleNum));
+//        Puzzle activePuzzle = new Puzzle(7, 7);
 
         Logic.runLogic(activePuzzle);
 

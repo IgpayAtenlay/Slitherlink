@@ -1,4 +1,4 @@
-public class ThreeCheck {
+public class ThreeLogic {
 
     public static void adjacentThrees(int x, int y, Puzzle puzzle) {
         if (!(puzzle.getNumber(x, y) == Number.THREE)) {
@@ -19,7 +19,7 @@ public class ThreeCheck {
         }
         for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
             if (puzzle.getNumber(x + diagonalDirection.getXOffset(), y + diagonalDirection.getYOffset()) == Number.THREE) {
-                puzzle.setSlash(x, y, diagonalDirection, PointOrSquare.SQUARE, SlashTypes.ONE_OR_OTHER);
+                puzzle.setSlash(x, y, diagonalDirection, PointOrSquare.SQUARE, SlashTypes.SLASH);
             }
         }
     }

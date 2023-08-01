@@ -1,12 +1,12 @@
-public class PerimeterCheck {
+public class PerimeterLogic {
 
     public static void checkPerimeter(int x, int y, Puzzle puzzle, PointOrSquare pointOrSquare) {
         if (pointOrSquare == PointOrSquare.SQUARE && puzzle.getNumber(x, y) == Number.EMPTY) {
             return;
         }
 
-        int numOfLines = getNumOfLines(x, y, puzzle, pointOrSquare);
-        int numOfX = getNumOfX(x, y, puzzle, pointOrSquare);
+        int numOfLines = puzzle.getNumOfLines(x, y, pointOrSquare);
+        int numOfX = puzzle.getNumOfX(x, y, pointOrSquare);
 
         int num;
 
@@ -51,7 +51,7 @@ public class PerimeterCheck {
                         numOfX++;
                     }
 
-                    if (puzzle.getSlash(x, y, diagonalDirection, pointOrSquare) == SlashTypes.ONE_OR_OTHER) {
+                    if (puzzle.getSlash(x, y, diagonalDirection, pointOrSquare) == SlashTypes.SLASH) {
                         if (numOfLines + 1 == num) {
                             puzzle.setLine(x, y, oppositeSideOneDirection, pointOrSquare, Line.X);
                             puzzle.setLine(x, y, oppositeSideTwoDirection, pointOrSquare, Line.X);
@@ -60,7 +60,7 @@ public class PerimeterCheck {
                             puzzle.setLine(x, y, oppositeSideOneDirection, pointOrSquare, Line.LINE);
                             puzzle.setLine(x, y, oppositeSideTwoDirection, pointOrSquare, Line.LINE);
                         }
-                    } else if (puzzle.getSlash(x, y, diagonalDirection, pointOrSquare) == SlashTypes.BOTH_OR_NEITHER) {
+                    } else if (puzzle.getSlash(x, y, diagonalDirection, pointOrSquare) == SlashTypes.BOTH) {
                         if (numOfLines + 2 > num) {
                             puzzle.setLine(x, y, diagonalDirection.getDirection(), pointOrSquare, Line.X);
                             puzzle.setLine(x, y, diagonalDirection.getDirection().getCounterClockwise(), pointOrSquare, Line.X);
@@ -75,32 +75,31 @@ public class PerimeterCheck {
             if (numOfLines + 1 == num) {
                 for (Direction direction : Direction.values()) {
                     if (puzzle.getLine(x, y, direction, pointOrSquare) == Line.EMPTY && puzzle.getLine(x, y, direction.getCounterClockwise(), pointOrSquare) == Line.EMPTY) {
-                        puzzle.setSlash(x, y, direction.getDiagonal(), pointOrSquare, SlashTypes.ONE_OR_OTHER);
+                        puzzle.setSlash(x, y, direction.getDiagonal(), pointOrSquare, SlashTypes.SLASH);
                     }
                 }
             }
         }
     }
 
+    public static void addNumber(int x, int y, Puzzle puzzle) {
+//            only does 2s really
 
-    public static int getNumOfLines(int x, int y, Puzzle puzzle, PointOrSquare pointOrSquare) {
-        int numOfLines = 0;
-        for (Direction direction: Direction.values()) {
-            if (puzzle.getLine(x, y, direction, pointOrSquare) == Line.LINE) {
-                numOfLines++;
+        int numOfLines = puzzle.getNumOfLines(x, y, PointOrSquare.SQUARE);
+        int numOfX = puzzle.getNumOfX(x, y, PointOrSquare.SQUARE);
+        int numOfSlashes = puzzle.getNumOfSlashes(x, y, PointOrSquare.SQUARE);
+
+        if (numOfLines + numOfX == 4) {
+            puzzle.setNumber(x, y, numOfLines, true, true);
+        } else {
+            if (numOfSlashes >= 2) {
+                for (DiagonalDirection diagonalDirection: DiagonalDirection.values()) {
+                    if (puzzle.getSlash(x, y, diagonalDirection, PointOrSquare.SQUARE) == SlashTypes.SLASH && puzzle.getSlash(x, y, diagonalDirection.getOpposite(), PointOrSquare.SQUARE) == SlashTypes.SLASH) {
+                        puzzle.setNumber(x, y, 2, true, true);
+                    }
+                }
             }
         }
-        return numOfLines;
-    }
-
-    public static int getNumOfX(int x, int y, Puzzle puzzle, PointOrSquare pointOrSquare) {
-        int numOfX = 0;
-        for (Direction direction: Direction.values()) {
-            if (puzzle.getLine(x, y, direction, pointOrSquare) == Line.X) {
-                numOfX++;
-            }
-        }
-        return numOfX;
     }
 
 }

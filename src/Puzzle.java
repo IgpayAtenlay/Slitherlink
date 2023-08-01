@@ -6,14 +6,18 @@ public class Puzzle {
     private final int sizeY;
     private Line[][] verticalLines;
     private Line[][] horizontalLines;
-    private SlashTypes[][] slashes;
     private Number[][] numbers;
+    private SlashTypes[][] slashes;
+    private Highlight[][] highlightColor;
+    private Number[][] tempNumbers;
+    private int changes;
 
 //    constructors
 
     public Puzzle(int sizeX, int sizeY) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
+        changes = 0;
 
         verticalLines = new Line[sizeY + 2][sizeX + 1];
         for (int y = 1; y < verticalLines.length - 1; y++) {
@@ -35,17 +39,21 @@ public class Puzzle {
             horizontalLines[y][horizontalLines[0].length - 1] = Line.X;
         }
 
+        numbers = new Number[sizeY][sizeX];
+        highlightColor = new Highlight[sizeY][sizeX];
+        tempNumbers = new Number[sizeY][sizeX];
+        for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeX; x++) {
+                numbers[y][x] = Number.EMPTY;
+                highlightColor[y][x] = Highlight.EMPTY;
+                tempNumbers[y][x] = Number.EMPTY;
+            }
+        }
+
         slashes = new SlashTypes[sizeY * 2 + 2][sizeX * 2 + 2];
         for (int y = 0; y < slashes.length; y++) {
             for (int x = 0; x < slashes[0].length; x++) {
                 slashes[y][x] = SlashTypes.EMPTY;
-            }
-        }
-
-        numbers = new Number[sizeY][sizeX];
-        for (int y = 0; y < sizeY; y++) {
-            for (int x = 0; x < sizeX; x++) {
-                numbers[y][x] = Number.EMPTY;
             }
         }
     }
@@ -55,6 +63,7 @@ public class Puzzle {
         for (int y = 0; y < sizeY; y++) {
             for (int x = 0; x < sizeX; x++) {
                 numbers[y][x] = Number.getNumber(puzzle[y][x]);
+                tempNumbers[y][x] = Number.getNumber(puzzle[y][x]);
             }
         }
     }
@@ -108,14 +117,16 @@ public class Puzzle {
     public void setLine(int x, int y, boolean isHorizontal, Line line, boolean isProtected) {
         if (isHorizontal) {
             if (x < horizontalLines[0].length && x >= 0 && y < horizontalLines.length && y >= 0) {
-                if (!isProtected || horizontalLines[y][x] == Line.EMPTY) {
+                if (!isProtected || horizontalLines[y][x] == Line.EMPTY && horizontalLines[y][x] != line) {
                     horizontalLines[y][x] = line;
+                    changes++;
                 }
             }
         } else {
             if (x < verticalLines[0].length && x >= 0 && y < verticalLines.length && y >= 0) {
-                if (!isProtected || verticalLines[y][x] == Line.EMPTY) {
+                if (!isProtected || verticalLines[y][x] == Line.EMPTY && verticalLines[y][x] != line) {
                     verticalLines[y][x] = line;
+                    changes++;
                 }
             }
         }
@@ -153,42 +164,62 @@ public class Puzzle {
         setLine(x, y, isHorizontal, line, true);
     }
 
-    public Number getNumber(int x, int y) {
+    public Number getNumber(int x, int y, boolean isTempNumber) {
         if (x >= sizeX || x < 0 || y >= sizeY || y <0) {
             return Number.EMPTY;
         } else {
-            return numbers[y][x];
-        }
-    }
-
-    public int getNumberValue(int x, int y) {
-        return getNumber(x, y).getValue();
-    }
-
-    public void setNumber(int x, int y, Number number, boolean isProtected) {
-        if (x < sizeX && x >=0 && y < sizeY && y >=0) {
-            if (!isProtected || numbers[y][x] == Number.EMPTY) {
-                numbers[y][x] = number;
+            if (isTempNumber && numbers[y][x] == Number.EMPTY) {
+                return tempNumbers[y][x];
+            } else {
+                return numbers[y][x];
             }
         }
     }
 
-    public void setNumbers(int x, int y, int number, boolean isProtected) {
-        setNumber(x, y, Number.getNumber(number), isProtected);
+    public Number getNumber(int x, int y) {
+        return getNumber(x, y, true);
     }
 
-    public void setNumbers(int x, int y, Number number) {
-        setNumber(x, y, number, true);
+    public int getNumberValue(int x, int y, boolean isTempNumber) {
+        return getNumber(x, y, isTempNumber).getValue();
     }
 
-    public void setNumbers(int x, int y, int number) {
-        setNumber(x, y, Number.getNumber(number), true);
+    public int getNumberValue(int x, int y) {
+        return getNumberValue(x, y, true);
+    }
+
+    public void setNumber(int x, int y, Number number, boolean isProtected, boolean isTempNumber) {
+        if (x < sizeX && x >=0 && y < sizeY && y >=0) {
+            if (!isProtected || numbers[y][x] == Number.EMPTY) {
+                if (!isTempNumber) {
+                    numbers[y][x] = number;
+                    tempNumbers[y][x] = number;
+                    changes++;
+                } else if (!isProtected || tempNumbers[y][x] == Number.EMPTY){
+                    tempNumbers[y][x] = number;
+                    changes++;
+                }
+            }
+        }
+    }
+
+    public void setNumber(int x, int y, int number, boolean isProtected, boolean isTempNumber) {
+        setNumber(x, y, Number.getNumber(number), isProtected, isTempNumber);
+    }
+
+    public void setNumber(int x, int y, Number number) {
+        setNumber(x, y, number, true, true);
+    }
+
+    public void setNumber(int x, int y, int number) {
+        setNumber(x, y, Number.getNumber(number), true, true);
     }
 
     public void setSlash(int x, int y, SlashTypes slashTypes, boolean isProtected) {
         if (x < slashes[0].length && x >= 0 && y < slashes.length && y >= 0) {
-            if (!isProtected || slashes[y][x] == SlashTypes.EMPTY) {
+            if (!isProtected || slashes[y][x] == SlashTypes.EMPTY && slashes[y][x] != slashTypes) {
                 slashes[y][x] = slashTypes;
+                changes++;
             }
         }
     }
@@ -253,14 +284,83 @@ public class Puzzle {
         }
     }
 
-//    to string
+    public Highlight getHighlightColor(int x, int y) {
+        if (x >= sizeX || x < 0 || y >= sizeY || y <0) {
+            return Highlight.OUTSIDE;
+        } else {
+            return highlightColor[y][x];
+        }
+    }
+
+    public void setHighlightColor(int x, int y, Highlight highlight, boolean isProtected) {
+        if (!isProtected || highlightColor[y][x] == Highlight.EMPTY && highlightColor[y][x] != highlight) {
+            highlightColor[y][x] = highlight;
+            changes++;
+        }
+    }
+
+    public void setHighlightColor(int x, int y, Highlight highlight) {
+        setHighlightColor(x, y, highlight, true);
+    }
+
+    public int getChanges() {
+        return changes;
+    }
+
+    public void setChanges(int changes) {
+        this.changes = changes;
+    }
+
+    //    hybrid getters and setters
+
+    public int getNumOfLines(int x, int y, PointOrSquare pointOrSquare) {
+        int numOfLines = 0;
+        for (Direction direction: Direction.values()) {
+            if (getLine(x, y, direction, pointOrSquare) == Line.LINE) {
+                numOfLines++;
+            }
+        }
+        return numOfLines;
+    }
+
+    public int getNumOfX(int x, int y, PointOrSquare pointOrSquare) {
+        int numOfX = 0;
+        for (Direction direction: Direction.values()) {
+            if (getLine(x, y, direction, pointOrSquare) == Line.X) {
+                numOfX++;
+            }
+        }
+        return numOfX;
+    }
+
+    public int getNumOfSlashes(int x, int y, PointOrSquare pointOrSquare) {
+        int numOfSlashes = 0;
+        for (DiagonalDirection diagonalDirection: DiagonalDirection.values()) {
+            if (getSlash(x, y, diagonalDirection, pointOrSquare) == SlashTypes.SLASH) {
+                numOfSlashes++;
+            }
+        }
+        return numOfSlashes;
+    }
+
+    public int getNumOfBoth(int x, int y, PointOrSquare pointOrSquare) {
+        int numOfBoth = 0;
+        for (DiagonalDirection diagonalDirection: DiagonalDirection.values()) {
+            if (getSlash(x, y, diagonalDirection, pointOrSquare) == SlashTypes.BOTH) {
+                numOfBoth++;
+            }
+        }
+        return numOfBoth;
+    }
+
+    //    to string
 
     @Override
     public String toString() {
         return toString(true);
     }
 
-    public String toString(boolean withSlashes) {
+    public String toString(boolean withEverything) {
         String string = "";
 
 //        above the grid
@@ -273,15 +373,15 @@ public class Puzzle {
         string += "\n";
 //        line 2
         string += "    ";
-        string += withSlashes ? SlashTypes.BOTH_OR_NEITHER.getString(DiagonalDirection.SOUTH_EAST) : " ";
+        string += withEverything ? SlashTypes.BOTH.getString(DiagonalDirection.SOUTH_EAST) : " ";
         for (int x = 0; x < sizeX; x++) {
             string += " ";
-            string += withSlashes ? getSlash(x, 0, DiagonalDirection.NORTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_WEST) : " ";
+            string += withEverything ? getSlash(x, 0, DiagonalDirection.NORTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_WEST) : " ";
             string += "   ";
-            string += withSlashes ? getSlash(x + 1, 0, DiagonalDirection.NORTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_EAST) : " ";
+            string += withEverything ? getSlash(x + 1, 0, DiagonalDirection.NORTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_EAST) : " ";
         }
         string += " ";
-        string += withSlashes ? SlashTypes.BOTH_OR_NEITHER.getString(DiagonalDirection.SOUTH_WEST) : " ";
+        string += withEverything ? SlashTypes.BOTH.getString(DiagonalDirection.SOUTH_WEST) : " ";
         string += "    ";
         string += "\n";
 
@@ -298,15 +398,17 @@ public class Puzzle {
             string += "\n";
 //            line 2
             string += "    ";
-            string += withSlashes ? getSlash(0, y, DiagonalDirection.SOUTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_EAST) : " ";
+            string += withEverything ? getSlash(0, y, DiagonalDirection.SOUTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_EAST) : " ";
             for (int x = 0; x < sizeX; x++){
                 string += getLine(x, y, Direction.WEST, PointOrSquare.SQUARE).getVertStr(false);
-                string += withSlashes ? getSlash(x, y, DiagonalDirection.NORTH_WEST, PointOrSquare.SQUARE).getString(DiagonalDirection.NORTH_WEST) : " ";
-                string += "   ";
-                string += withSlashes ? getSlash(x, y, DiagonalDirection.NORTH_EAST, PointOrSquare.SQUARE).getString(DiagonalDirection.NORTH_EAST) : " ";
+                string += withEverything ? getSlash(x, y, DiagonalDirection.NORTH_WEST, PointOrSquare.SQUARE).getString(DiagonalDirection.NORTH_WEST) : " ";
+                string += " ";
+                string += withEverything ? getHighlightColor(x, y).getStr() : " ";
+                string += " ";
+                string += withEverything ? getSlash(x, y, DiagonalDirection.NORTH_EAST, PointOrSquare.SQUARE).getString(DiagonalDirection.NORTH_EAST) : " ";
             }
             string += getLine(sizeX - 1, y, Direction.EAST, PointOrSquare.SQUARE).getVertStr(false);
-            string += withSlashes ? getSlash(sizeX, y, DiagonalDirection.SOUTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_WEST) : " ";
+            string += withEverything ? getSlash(sizeX, y, DiagonalDirection.SOUTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_WEST) : " ";
             string += "    ";
             string += "\n";
 //            line 3
@@ -314,7 +416,7 @@ public class Puzzle {
             for (int x = 0; x < sizeX; x++){
                 string += getLine(x, y, Direction.WEST, PointOrSquare.SQUARE).getVertStr(true);
                 string += "  ";
-                string += getNumber(x, y).getStr();
+                string += withEverything ? getNumber(x, y, true).getStr() : getNumber(x, y, false).getStr();
                 string += "  ";
             }
             string += getLine(sizeX - 1, y, Direction.EAST, PointOrSquare.SQUARE).getVertStr(true);
@@ -322,15 +424,15 @@ public class Puzzle {
             string += "\n";
 //            line 4
             string += "    ";
-            string += withSlashes ? getSlash(0, y + 1, DiagonalDirection.NORTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_EAST) : " ";
+            string += withEverything ? getSlash(0, y + 1, DiagonalDirection.NORTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_EAST) : " ";
             for (int x = 0; x < sizeX; x++){
                 string += getLine(x, y, Direction.WEST, PointOrSquare.SQUARE).getVertStr(false);
-                string += withSlashes ? getSlash(x, y, DiagonalDirection.SOUTH_WEST, PointOrSquare.SQUARE).getString(DiagonalDirection.SOUTH_WEST) : " ";
+                string += withEverything ? getSlash(x, y, DiagonalDirection.SOUTH_WEST, PointOrSquare.SQUARE).getString(DiagonalDirection.SOUTH_WEST) : " ";
                 string += "   ";
-                string += withSlashes ? getSlash(x, y, DiagonalDirection.SOUTH_EAST, PointOrSquare.SQUARE).getString(DiagonalDirection.SOUTH_EAST) : " ";
+                string += withEverything ? getSlash(x, y, DiagonalDirection.SOUTH_EAST, PointOrSquare.SQUARE).getString(DiagonalDirection.SOUTH_EAST) : " ";
             }
             string += getLine(sizeX - 1, y, Direction.EAST, PointOrSquare.SQUARE).getVertStr(false);
-            string += withSlashes ? getSlash(sizeX, y + 1, DiagonalDirection.NORTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_WEST) : " ";
+            string += withEverything ? getSlash(sizeX, y + 1, DiagonalDirection.NORTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.SOUTH_WEST) : " ";
             string += "    ";
             string += "\n";
         }
@@ -348,15 +450,15 @@ public class Puzzle {
 //        below the grid
 //        line 1
         string += "    ";
-        string += withSlashes ? SlashTypes.BOTH_OR_NEITHER.getString(DiagonalDirection.NORTH_EAST) : " ";
+        string += withEverything ? SlashTypes.BOTH.getString(DiagonalDirection.NORTH_EAST) : " ";
         for (int x = 0; x < sizeX; x++) {
             string += " ";
-            string += withSlashes ? getSlash(x, sizeY, DiagonalDirection.SOUTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_WEST) : " ";
+            string += withEverything ? getSlash(x, sizeY, DiagonalDirection.SOUTH_EAST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_WEST) : " ";
             string += "   ";
-            string += withSlashes ? getSlash(x + 1, sizeY, DiagonalDirection.SOUTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_EAST) : " ";
+            string += withEverything ? getSlash(x + 1, sizeY, DiagonalDirection.SOUTH_WEST, PointOrSquare.POINT).getString(DiagonalDirection.NORTH_EAST) : " ";
         }
         string += " ";
-        string += withSlashes ? SlashTypes.BOTH_OR_NEITHER.getString(DiagonalDirection.NORTH_WEST) : " ";
+        string += withEverything ? SlashTypes.BOTH.getString(DiagonalDirection.NORTH_WEST) : " ";
         string += "    ";
         string += "\n";
 //        line 2

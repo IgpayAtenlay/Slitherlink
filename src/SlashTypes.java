@@ -1,7 +1,7 @@
 public enum SlashTypes {
     EMPTY(" ", " ", " ", " "),
-    ONE_OR_OTHER("/", "\\", "/", "\\"),
-    BOTH_OR_NEITHER("⌜", "⌝", "⌟", "⌞");
+    SLASH("/", "\\", "/", "\\"),
+    BOTH("⌜", "⌝", "⌟", "⌞");
 
     private final String northWest;
     private final String northEast;

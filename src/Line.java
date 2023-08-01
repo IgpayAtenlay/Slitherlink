@@ -19,6 +19,16 @@ public enum Line {
         return getVertStr(true);
     }
 
+    public Line getOpposite() {
+        if (this == LINE) {
+            return X;
+        } else if (this == X) {
+            return LINE;
+        } else {
+            return EMPTY;
+        }
+    }
+
     public String getVertStr(boolean isMiddle) {
         if (isMiddle) {
             return vertStr;
