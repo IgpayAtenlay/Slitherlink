@@ -1,3 +1,5 @@
+package puzzle;
+
 public enum Line {
     EMPTY("     ", " "),
     LINE("-----", "|"),

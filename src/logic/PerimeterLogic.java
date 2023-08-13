@@ -1,3 +1,8 @@
+package logic;
+
+import puzzle.Number;
+import puzzle.*;
+
 public class PerimeterLogic {
 
     public static void checkPerimeter(int x, int y, Puzzle puzzle, PointOrSquare pointOrSquare) {

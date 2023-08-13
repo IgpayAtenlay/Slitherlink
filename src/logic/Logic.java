@@ -1,6 +1,13 @@
+package logic;
+
+import puzzle.Number;
+import puzzle.PointOrSquare;
+import puzzle.Puzzle;
+import storage.Memory;
+
 public class Logic {
 
-    public static void runLogic(Puzzle puzzle) {
+    public static int runLogic(Puzzle puzzle) {
         int numOfLogicRuns = 0;
         do {
             do {
@@ -15,8 +22,7 @@ public class Logic {
             LoopLogic.checkForLoops(puzzle);
         } while (puzzle.getChanges() > 0);
 
-
-        System.out.printf("Logic ran %d times%n%n", numOfLogicRuns);
+        return numOfLogicRuns;
     }
 
     public static void runThree(Puzzle puzzle) {
@@ -78,6 +84,18 @@ public class Logic {
             for (int x = 0; x < puzzle.getSizeX(); x++) {
                 HighlightLogic.addHighlight(x, y, puzzle);
                 HighlightLogic.betweenHighlight(x, y, puzzle);
+            }
+        }
+    }
+
+    public static void checkSolvablePuzzles() {
+        for (int i = 0; i < Memory.getNumOfPuzzles(); i++) {
+            System.out.printf("Testing puzzle %d%n", i);
+            Puzzle testPuzzle = new Puzzle(i);
+            Logic.runLogic(testPuzzle);
+            boolean isDone = CheckDone.isDone(testPuzzle);
+            if (!isDone) {
+                System.out.printf("Puzzle %d cannot be solved%n", i);
             }
         }
     }

@@ -1,3 +1,7 @@
+package logic;
+
+import puzzle.*;
+
 public class SlashLogic {
 
     public static void addSlash(int x, int y, Puzzle puzzle) {

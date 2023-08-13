@@ -1,3 +1,5 @@
+package storage;
+
 public class Memory {
     private static int[][][] puzzle;
 
@@ -122,10 +124,9 @@ public class Memory {
                 {-1, 1,-1,-1, 0,-1, 3},
                 {-1, 3, 3,-1,-1,-1, 1}
         };
-//        don't know how to solve - guess and check?
         puzzle[13] = new int[][] {
                 {-1,-1, 2, 2, 3, 3,-1},
-                { 2, 2,-1,-1,-1, 0,-1},
+                { 3, 3,-1,-1,-1, 0,-1},
                 { 2,-1,-1,-1,-1,-1, 3},
                 {-1,-1,-1,-1, 3,-1,-1},
                 {-1,-1, 3,-1, 2, 2,-1},
@@ -228,5 +229,9 @@ public class Memory {
 
     public static int[][] getPuzzle(int puzzleNum) {
         return puzzle[puzzleNum];
+    }
+
+    public static int getNumOfPuzzles() {
+        return puzzle.length;
     }
 }

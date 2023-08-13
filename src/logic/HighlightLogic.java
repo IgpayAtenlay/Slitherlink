@@ -1,3 +1,7 @@
+package logic;
+
+import puzzle.*;
+
 public class HighlightLogic {
         public static void addHighlight(int x, int y, Puzzle puzzle) {
             if (puzzle.getHighlightColor(x, y) == Highlight.EMPTY) {

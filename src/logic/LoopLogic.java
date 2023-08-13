@@ -1,3 +1,9 @@
+package logic;
+
+import puzzle.*;
+
+import java.util.Arrays;
+
 public class LoopLogic {
     public static int[] findLoopStart(int startX, int startY, Puzzle puzzle) {
         int y = startY;
@@ -16,10 +22,6 @@ public class LoopLogic {
         }
 
         return new int[] {};
-    }
-
-    public static int[] findLoopStart(Puzzle puzzle) {
-        return findLoopStart(0, 0, puzzle);
     }
 
     public static int[][] findAllLoopStarts(Puzzle puzzle) {
@@ -58,13 +60,7 @@ public class LoopLogic {
             }
         }
 
-        int[][] cutLoop = new int[length][];
-
-        for (int i = 0; i < length; i ++) {
-            cutLoop[i] = loopStarts[i];
-        }
-
-        return cutLoop;
+        return Arrays.copyOf(loopStarts, length);
     }
 
     public static int[] startToEnd(int[] current, Puzzle puzzle) {
@@ -83,14 +79,14 @@ public class LoopLogic {
         int[] newPoint = new int[2];
         if (puzzle.getNumOfLines(current[0], current[1], PointOrSquare.POINT) == 1) {
             for (Direction direction: Direction.values()) {
-                if (puzzle.getLine(current[0], current[1], direction,PointOrSquare.POINT) == Line.LINE) {
+                if (puzzle.getLine(current[0], current[1], direction, PointOrSquare.POINT) == Line.LINE) {
                     newPoint[0] = current[0] + direction.getXOffset();
                     newPoint[1] = current[1] + direction.getYOffset();
                 }
             }
         } else {
             for (Direction direction: Direction.values()) {
-                if (puzzle.getLine(current[0], current[1], direction,PointOrSquare.POINT) == Line.LINE) {
+                if (puzzle.getLine(current[0], current[1], direction, PointOrSquare.POINT) == Line.LINE) {
                     if (!(from[0] == current[0] + direction.getXOffset() && from[1] == current[1] + direction.getYOffset())) {
                         newPoint[0] = current[0] + direction.getXOffset();
                         newPoint[1] = current[1] + direction.getYOffset();
@@ -108,11 +104,11 @@ public class LoopLogic {
         if (allLoopStarts.length > 2) {
 //            do stuff
 
-//            itterate through all starting points
+//            iterate through all starting points
             for (int[] start: allLoopStarts) {
 //            follow the line
                 int[] end = startToEnd(start, puzzle);
-//            if adjacent, put x inbetween
+//            if adjacent, put x in between
                 if (start[0] == end[0] && start[1] + 1 == end[1]) {
                     puzzle.setLine(start[0], start[1], Direction.SOUTH, PointOrSquare.POINT, Line.X);
                 } else if (start[0] + 1 == end[0] && start[1] == end[1]) {

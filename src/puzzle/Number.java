@@ -1,3 +1,5 @@
+package puzzle;
+
 public enum Number {
     ZERO(0, "0"),
     ONE(1, "1"),

@@ -1,7 +1,9 @@
+package puzzle;
+
 public enum SlashTypes {
     EMPTY(" ", " ", " ", " "),
     SLASH("/", "\\", "/", "\\"),
-    BOTH("⌜", "⌝", "⌟", "⌞");
+    BOTH("⌟", "⌞", "⌜", "⌝");
 
     private final String northWest;
     private final String northEast;

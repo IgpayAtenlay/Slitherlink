@@ -1,3 +1,8 @@
+package logic;
+
+import puzzle.Number;
+import puzzle.*;
+
 public class TwoLogic {
 
     public static void cornerTwo(int x, int y, Puzzle puzzle) {

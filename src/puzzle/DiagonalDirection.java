@@ -1,3 +1,5 @@
+package puzzle;
+
 public enum DiagonalDirection {
 
     NORTH_WEST(0, 0, 0, 1, 3, 2),

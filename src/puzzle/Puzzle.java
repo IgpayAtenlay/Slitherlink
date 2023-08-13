@@ -1,3 +1,7 @@
+package puzzle;
+
+import storage.Memory;
+
 public class Puzzle {
 
 //    variables
@@ -66,6 +70,10 @@ public class Puzzle {
                 tempNumbers[y][x] = Number.getNumber(puzzle[y][x]);
             }
         }
+    }
+
+    public Puzzle(int puzzleNum) {
+        this(Memory.getPuzzle(puzzleNum));
     }
 
 //    getters and setters
@@ -474,5 +482,58 @@ public class Puzzle {
 
 //    load puzzle
 
+    public void loadPuzzle(int[][] puzzle) {
+
+//        clear verticalLines
+        for (int y = 1; y < verticalLines.length - 1; y++) {
+            for (int x = 0; x < verticalLines[0].length; x++) {
+                verticalLines[y][x] = Line.EMPTY;
+            }
+        }
+        for (int x = 0; x < verticalLines[0].length; x++) {
+            verticalLines[0][x] = Line.X;
+            verticalLines[verticalLines.length - 1][x] = Line.X;
+        }
+
+//        clear horizontalLines
+        for (int y = 0; y < horizontalLines.length; y++) {
+            for (int x = 1; x < horizontalLines[0].length - 1; x++) {
+                horizontalLines[y][x] = Line.EMPTY;
+            }
+            horizontalLines[y][0] = Line.X;
+            horizontalLines[y][horizontalLines[0].length - 1] = Line.X;
+        }
+
+//        clear slashes
+        for (int y = 0; y < slashes.length; y++) {
+            for (int x = 0; x < slashes[0].length; x++) {
+                slashes[y][x] = SlashTypes.EMPTY;
+            }
+        }
+
+//        clear numbers, highlightColor, and tempNumbers
+        for (int y = 0; y < sizeY; y++) {
+            for (int x = 0; x < sizeX; x++) {
+                numbers[y][x] = Number.EMPTY;
+                highlightColor[y][x] = Highlight.EMPTY;
+                tempNumbers[y][x] = Number.EMPTY;
+            }
+        }
+
+//        load numbers
+        if (puzzle.length == sizeY && puzzle[0].length == sizeX) {
+            for (int y = 0; y < sizeY; y++) {
+                for (int x = 0; x < sizeX; x++) {
+                    numbers[y][x] = Number.getNumber(puzzle[y][x]);
+                    tempNumbers[y][x] = Number.getNumber(puzzle[y][x]);
+                }
+            }
+        }
+
+    }
+
+    public void loadPuzzle(int puzzleNum) {
+        loadPuzzle(Memory.getPuzzle(puzzleNum));
+    }
 
 }

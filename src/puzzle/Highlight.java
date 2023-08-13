@@ -1,3 +1,5 @@
+package puzzle;
+
 public enum Highlight {
     EMPTY(" "),
     INSIDE("I"),

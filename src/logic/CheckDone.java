@@ -1,3 +1,8 @@
+package logic;
+
+import puzzle.PointOrSquare;
+import puzzle.Puzzle;
+
 public class CheckDone {
 
     public static boolean isDone(Puzzle puzzle) {
@@ -18,7 +23,7 @@ public class CheckDone {
     }
 
     public static boolean isOneLoop(Puzzle puzzle) {
-        int[][] loopOne = new int[(puzzle.getSizeX() + 1) * (puzzle.getSizeY() + 1)][];
+        int[][] loopOne = new int[(puzzle.getSizeX() + 1) * (puzzle.getSizeY() + 1) + 1][];
 //        find starting place
         loopOne[0] = findLoop(puzzle);
 //        create an array with all dots in a loop

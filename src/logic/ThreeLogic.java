@@ -1,3 +1,8 @@
+package logic;
+
+import puzzle.*;
+import puzzle.Number;
+
 public class ThreeLogic {
 
     public static void adjacentThrees(int x, int y, Puzzle puzzle) {
